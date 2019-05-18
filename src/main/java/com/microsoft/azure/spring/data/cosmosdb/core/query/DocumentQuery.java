@@ -44,19 +44,6 @@ public class DocumentQuery {
         return this;
     }
 
-    private boolean isCrossPartitionQuery(@NonNull String keyName) {
-        Assert.hasText(keyName, "PartitionKey should have text.");
-
-        final Optional<Criteria> criteria = this.getSubjectCriteria(this.criteria, keyName);
-
-        return criteria.map(criteria1 -> criteria1.getType() != CriteriaType.IS_EQUAL).orElse(true);
-    }
-
-    private boolean hasKeywordOr() {
-        // If there is OR keyword in DocumentQuery, the top node of Criteria must be OR type.
-        return this.criteria.getType() == CriteriaType.OR;
-    }
-
     /**
      * Indicate if DocumentQuery should enable cross partition query.
      *
@@ -64,14 +51,7 @@ public class DocumentQuery {
      * @return
      */
     public boolean isCrossPartitionQuery(@NonNull List<String> partitionKeys) {
-        if (partitionKeys.isEmpty()) {
-            return true;
-        }
-
-        return partitionKeys.stream().filter(this::isCrossPartitionQuery)
-                .findFirst()
-                .map(p -> true)
-                .orElse(hasKeywordOr());
+       return true;
     }
 
     public Optional<Criteria> getCriteriaByType(@NonNull CriteriaType criteriaType) {
